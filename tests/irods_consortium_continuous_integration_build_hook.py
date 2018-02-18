@@ -12,12 +12,14 @@ def install_r_packages():
     # copy source into tmp dir, build it, install it as irods user
     build_dir = os.getcwd()
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'chmod', '-R', '777', build_dir], check_rc=True)
-    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-prerequisites.R'.format(build_dir)], check_rc=True)
-    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && make r_cmd_build'.format(build_dir)], check_rc=True)
-    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && make r_cmd_pkg'.format(build_dir)], check_rc=True)
-    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-rirods-package.R'.format(build_dir)], check_rc=True)
+#    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-prerequisites.R'.format(build_dir)], check_rc=True)
+#    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && make r_cmd_build'.format(build_dir)], check_rc=True)
+#    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && make r_cmd_pkg'.format(build_dir)], check_rc=True)
+#    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-rirods-package.R'.format(build_dir)], check_rc=True)
     # sync test files
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'rsync -r {0}/tests/ /var/lib/irods/tests/pydevtest/'.format(build_dir)], check_rc=True)
+    # all in one
+    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-prerequisites.R && make r_cmd_build && make r_cmd_pkg && R CMD BATCH install-rirods-package.R && cd /var/lib/irods/tests/pydevtest && python run_tests.py --xml_output --run_specific_test test_client_rirods'.format(build_dir)], check_rc=True)
 
 def install_testing_dependencies():
     dispatch_map = {
@@ -43,7 +45,7 @@ def gather_logs(output_root_directory):
 
 def main(output_root_directory):
     install_r_packages()
-    run_tests()
+#    run_tests()
     if output_root_directory:
         irods_python_ci_utilities.mkdir_p(output_root_directory)
         gather_xml_reports(output_root_directory)
