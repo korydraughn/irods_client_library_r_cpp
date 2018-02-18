@@ -12,15 +12,11 @@ def install_r_packages():
     # copy source into tmp dir, build it, install it as irods user
     build_dir = os.getcwd()
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'chmod', '-R', '777', build_dir], check_rc=True)
-    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-Rcpp.R'.format(build_dir)], check_rc=True)
+    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-prerequisites.R'.format(build_dir)], check_rc=True)
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && make r_cmd_pkg'.format(build_dir)], check_rc=True)
-    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-packages.R'.format(build_dir)], check_rc=True)
+    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-rirods-package.R'.format(build_dir)], check_rc=True)
     # sync test files
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'rsync -r {0}/tests/ /var/lib/irods/tests/pydevtest/'.format(build_dir)], check_rc=True)
-
-def run_tests():
-#    install_testing_dependencies()
-    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd /var/lib/irods/tests/pydevtest && python run_tests.py --xml_output --run_specific_test test_client_rirods'.format(os.getcwd())], check_rc=False)
 
 def install_testing_dependencies():
     dispatch_map = {
@@ -33,6 +29,9 @@ def install_testing_dependencies():
 
 def install_testing_dependencies_apt():
     irods_python_ci_utilities.install_os_packages(['libjansson4','libkrb5-dev'])
+
+def run_tests():
+    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd /var/lib/irods/tests/pydevtest && python run_tests.py --xml_output --run_specific_test test_client_rirods'.format(os.getcwd())], check_rc=False)
 
 def gather_xml_reports(output_root_directory):
     shutil.copytree('/var/lib/irods/tests/pydevtest/test-reports', os.path.join(output_root_directory, 'test-reports'))
