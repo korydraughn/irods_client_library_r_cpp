@@ -13,6 +13,7 @@ def install_r_packages():
     build_dir = os.getcwd()
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'chmod', '-R', '777', build_dir], check_rc=True)
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-prerequisites.R'.format(build_dir)], check_rc=True)
+    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && make r_cmd_build'.format(build_dir)], check_rc=True)
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && make r_cmd_pkg'.format(build_dir)], check_rc=True)
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-rirods-package.R'.format(build_dir)], check_rc=True)
     # sync test files
