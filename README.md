@@ -12,6 +12,7 @@ Support for iRODS 4.2+ is forthcoming.
 
 ## Installation
 ### Prerequisites are:
-`irods-dev irods-runtime gcc gcc-c++`
+`yum install irods-devel irods-runtime gcc gcc-c++`
+`apt-get install irods-dev irods-runtime g++`
 ### Installing the R package
 `install.packages('./rirods_1.0.tar.gz', repos = NULL, type="source")`
