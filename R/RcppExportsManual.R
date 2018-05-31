@@ -2,7 +2,7 @@
 #' Shows current iRODS environment settings
 #'
 ienv <- function() {
-  x <- .Call('rirods_ienv', PACKAGE = 'rirods')
+  x <- .Call('rirods_ienv')
   return(as.list(x))
 }
 
@@ -11,7 +11,7 @@ ienv <- function() {
 #' @param args "ils" one or several iRODS data-object (file) or collection (directory) paths
 #' @return A data frame with information about collections and data objects under the supplied paths
 ils <- function(args="") {
-  x <- .Call('rirods_ils', PACKAGE = 'rirods', args = args)
+  x <- .Call('rirods_ils', args = args)
   x$Modify_time <- as.POSIXct(as.numeric(as.character(x$Modify_time)),origin="1970-01-01")
   x$Create_time <- as.POSIXct(as.numeric(as.character(x$Create_time)),origin="1970-01-01")
   return(x)
@@ -22,7 +22,7 @@ ils <- function(args="") {
 #' @param args "isearch" icommand params
 #'
 isearch <- function(constraints) {
-  x <- .Call('rirods_isearch', PACKAGE = 'rirods', constraints)
+  x <- .Call('rirods_isearch', constraints)
   x$Modify_time <- as.POSIXct(as.numeric(as.character(x$Modify_time)),origin="1970-01-01")
   x$Create_time <- as.POSIXct(as.numeric(as.character(x$Create_time)),origin="1970-01-01")
   return(x)
@@ -49,9 +49,9 @@ isearch <- function(constraints) {
 iput <- function(src_path, dest_path, data_type = "", force = FALSE, calculate_checksum = FALSE, checksum = FALSE, progress = FALSE, verbose = FALSE, metadata = "", acl = "") {
 
     if(class(metadata)=="character"){
-      .Call('rirods_iput', PACKAGE = 'rirods', src_path, dest_path, data_type, force, calculate_checksum, checksum, progress, verbose, metadata, acl)
+      .Call('rirods_iput', src_path, dest_path, data_type, force, calculate_checksum, checksum, progress, verbose, metadata, acl)
     } else if (class(metadata)=="data.frame"){
-      .Call('rirods_iput', PACKAGE = 'rirods', src_path, dest_path, data_type, force, calculate_checksum, checksum, progress, verbose, .metadata_df_to_str(metadata), acl)
+      .Call('rirods_iput', src_path, dest_path, data_type, force, calculate_checksum, checksum, progress, verbose, .metadata_df_to_str(metadata), acl)
     }
 }
 
@@ -65,7 +65,7 @@ iput <- function(src_path, dest_path, data_type = "", force = FALSE, calculate_c
 #' @param verbose verbose
 #'
 iget <- function(src_path, dest_path=tempdir(), force = FALSE, checksum = FALSE, progress = FALSE, verbose = FALSE) {
-  .Call('rirods_iget', PACKAGE = 'rirods', src_path, dest_path, force, checksum, progress, verbose)
+  .Call('rirods_iget', src_path, dest_path, force, checksum, progress, verbose)
 }
 
 #' imeta_add
@@ -76,10 +76,10 @@ iget <- function(src_path, dest_path=tempdir(), force = FALSE, checksum = FALSE,
 #'
 imeta_add <- function(type, name, avu) {
   if(class(avu)=="character"){
-    .Call('rirods_imeta_add', PACKAGE = 'rirods', type, name, avu)
+    .Call('rirods_imeta_add', type, name, avu)
   } else if (class(avu)=="data.frame"){
     for(i in 1:nrow(avu)) {
-      .Call('rirods_imeta_add', PACKAGE = 'rirods', type, name, .metadata_df_to_str(avu[i,]))
+      .Call('rirods_imeta_add', type, name, .metadata_df_to_str(avu[i,]))
     }
   }
 }
@@ -92,9 +92,9 @@ imeta_add <- function(type, name, avu) {
 #'
 imeta_addw <- function(type, name, avu) {
   if(class(avu)=="character"){
-    .Call('rirods_imeta_addw', PACKAGE = 'rirods', type, name, avu)
+    .Call('rirods_imeta_addw', type, name, avu)
   } else if (class(avu)=="data.frame"){
-    .Call('rirods_imeta_addw', PACKAGE = 'rirods', type, name, .metadata_df_to_str(avu))
+    .Call('rirods_imeta_addw', type, name, .metadata_df_to_str(avu))
   }
 }
 
@@ -106,10 +106,10 @@ imeta_addw <- function(type, name, avu) {
 #'
 imeta_rm <- function(type, name, avu) {
   if(class(avu)=="character"){
-    .Call('rirods_imeta_rm', PACKAGE = 'rirods', type, name, avu)
+    .Call('rirods_imeta_rm', type, name, avu)
   } else if (class(avu)=="data.frame"){
     for(i in 1:nrow(avu)) {
-      .Call('rirods_imeta_rm', PACKAGE = 'rirods', type, name, .metadata_df_to_str(avu[i,]))
+      .Call('rirods_imeta_rm', type, name, .metadata_df_to_str(avu[i,]))
     }
   }
 }
