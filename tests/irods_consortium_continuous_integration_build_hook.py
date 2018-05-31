@@ -19,7 +19,7 @@ def install_r_packages():
     # sync test files
     irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'rsync -r {0}/tests/ /var/lib/irods/tests/pydevtest/'.format(build_dir)], check_rc=True)
     # all in one
-    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-prerequisites.R && make r_cmd_build && make r_cmd_pkg && R CMD BATCH install-rirods-package.R && cd /var/lib/irods/tests/pydevtest && python run_tests.py --xml_output --run_specific_test test_client_rirods'.format(build_dir)], check_rc=True)
+    irods_python_ci_utilities.subprocess_get_output(['sudo', 'su', '-', 'irods', '-c', 'export R_LIBS={0} && cd {0} && R CMD BATCH install-prerequisites.R && make r_cmd_build && make r_cmd_install && cd /var/lib/irods/tests/pydevtest && python run_tests.py --xml_output --run_specific_test test_client_rirods'.format(build_dir)], check_rc=True)
 
 def install_testing_dependencies():
     dispatch_map = {
