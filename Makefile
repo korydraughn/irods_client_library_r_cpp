@@ -8,19 +8,19 @@ r_build_unlock:
 rcpp_attributes:
 	@echo "Working dir: "`pwd`
 	@echo `Rscript -e 'library(Rcpp); Rcpp::compileAttributes()'`
-	
+
 r_cmd_build: rcpp_attributes r_build_unlock
 	@echo "Working dir: "`pwd`
 	R CMD build .
-	
+
 r_cmd_pkg: rcpp_attributes r_build_unlock
 	@echo "Working dir: "`pwd`
 	R CMD INSTALL --build .
-	
+
 r_cmd_clean: rcpp_attributes r_build_unlock
 	@echo "Working dir: "`pwd`
 	R CMD INSTALL --clean .
-	
+
 r_cmd_install: rcpp_attributes r_build_unlock
 	@echo "Working dir: "`pwd`
 	R CMD INSTALL .

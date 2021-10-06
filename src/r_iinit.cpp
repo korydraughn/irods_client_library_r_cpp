@@ -24,7 +24,7 @@ using namespace Rcpp;
 
 #include "boost/lexical_cast.hpp"
 
-#include "jansson.h"
+#include "json.h"
 
 #include <iostream>
 #include <fstream>
